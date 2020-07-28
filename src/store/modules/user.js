@@ -48,7 +48,10 @@ const actions = {
       var data = {
         param: {
           username: username.trim(),
-          password: password
+          password: password,
+          sysName: 'call_boss',
+          loginType: 'call_boss',
+          clientPassword: 'nfjkMaHiO4Wz42Fb1jNVWlilUzBXxwqD'
         }
       }
       userLogin(data).then(response => {
@@ -104,7 +107,9 @@ const actions = {
     console.log(token)
     var data = {
       param: {
-        token: token[1]
+        token: token[1],
+        clientCode: 'call_boss',
+        sysName: 'call_boss'
       }
     }
     return new Promise((resolve, reject) => {

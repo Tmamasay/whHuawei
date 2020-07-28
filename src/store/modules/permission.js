@@ -111,6 +111,8 @@ function convertRouter(asyncRouterMap) {
     var zxgl_icon = ['zxgl', 'zxgl1', 'zxglhis']// 坐席管理
     var hdgl_icon = ['hdgl', 'hdgl_zl', 'hdgl_gr']// 话单管理
     var xtgl_icon = ['xtgl', 'xtgl_js']// 系统管理
+    var mes_icon = ['message']// 系统管理
+    var phone_icon = ['phone']// 系统管理
     asyncRouterMap.forEach(item => {
       // this.set(item, 0, arricon[0])
       switch (item.menuName) {
@@ -128,6 +130,12 @@ function convertRouter(asyncRouterMap) {
           break
         case '系统管理':
           item.icon = xtgl_icon[0]
+          break
+        case '挂机短信':
+          item.icon = mes_icon[0]
+          break
+        case '号码库':
+          item.icon = phone_icon[0]
           break
         default:
           break
