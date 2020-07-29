@@ -1,16 +1,19 @@
 <template>
-  <div class="grhd_box">
-    <el-form :inline="true" :model="query" class="demo-form-inline">
-      <el-form-item label="客户姓名:">
-        <el-input v-model="query.name" placeholder="请输入客户姓名" />
-      </el-form-item>
-      <el-form-item label="客户电话:">
-        <el-input v-model="query.phone" placeholder="请输入客户电话" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="search">查询</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="grhd_box shaowAll">
+    <div class="toolS">
+      <p class="Ptitle">通话记录</p>
+      <el-form :inline="true" :model="query" class="demo-form-inline">
+        <el-form-item label="">
+          <el-input v-model="query.name" placeholder="请输入客户姓名" />
+        </el-form-item>
+        <el-form-item label="">
+          <el-input v-model="query.phone" placeholder="请输入客户电话" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="search">查询</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
     <el-table
       ref="zx-list-data-&quot;"
       v-loading="loading"
@@ -319,6 +322,25 @@ parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60) + '�
 </script>
 
 <style scoped>
+.toolS{
+  display: flex;
+  justify-content: space-between;
+   padding-bottom: 10px;
+   align-items:center;
+}
+.shaowAll{
+  /* box-shadow: 2px 4px 8px 8px rgba(0, 0, 0, 0.05); */
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  padding: 20px;
+
+}
+.Ptitle{
+      font-size: 18px;
+    line-height: 18px;
+    color: #222;
+    font-weight: 700;
+
+}
 .grhd_box{
   margin:20px;
 }

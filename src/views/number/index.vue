@@ -4,10 +4,10 @@
     <div class="chart_box shaowAll">
       <div class="heardNum">
         <h3 class="Ptitle">号码库上传</h3>
-        <p class="tips">上传未指定用户将上传至公共号码库</p>
+        <p class="tips">上传未指定用户将上传至公共号码库（只能上传execl文件）</p>
       <!-- <a class="downLin2" href="https://htk-call.oss-cn-beijing.aliyuncs.com/excle/template/%E5%AE%A2%E6%88%B7%E4%BF%A1%E6%81%AF%E5%AF%BC%E5%85%A5.xlsx">模板下载</a> -->
       </div>
-      <div id="myChart" style="width:100%; height:400px">
+      <div id="myChart" style="width:100%; ">
         <el-form ref="form" label-position="left" :model="queryUp" label-width="110px">
 
           <el-form-item label="号码掩盖">
@@ -24,7 +24,7 @@
             />
           </el-form-item>
           <el-form-item label="选择成员">
-            <el-select v-model="queryUp.user" placeholder="请选择用户" style="width:180px;margin-left:10px" @change="getUser1">
+            <el-select v-model="queryUp.user" placeholder="请选择用户" @change="getUser1">
               <el-option
                 v-for="item in userData"
                 :key="item.uid"
@@ -32,6 +32,24 @@
                 :value="item.uid"
               />
             </el-select>
+          </el-form-item>
+          <el-form-item label="号码上传">
+            <el-upload
+              class="upload-demo"
+              style="width:30%"
+              drag
+              action
+              accept=".xls, .xlsx"
+              :http-request="uploadFile"
+              :limit="1"
+              :on-change="handlePreview"
+              :on-remove="handleRemove"
+              :auto-upload="true"
+            >
+              <i class="el-icon-upload" />
+              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+              <!-- <div slot="tip" class="el-upload__tip">只能上传execl文件</div> -->
+            </el-upload>
           </el-form-item>
         </el-form>
 
@@ -56,7 +74,7 @@
           </el-select>
           <el-button type="danger" size="mini" style="margin-left:5px" @click="pushNull">清空</el-button>
         </div> -->
-        <el-upload
+        <!-- <el-upload
           class="upload-demo"
           style="margin-left:25px;margin-top:30px;width:30%"
           drag
@@ -71,51 +89,52 @@
           <i class="el-icon-upload" />
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
           <div slot="tip" class="el-upload__tip">只能上传execl文件</div>
-        </el-upload>
+        </el-upload> -->
 
+      </div>
+      <div class="heardNum">
+        <h3 class="Ptitle">导入历史</h3>
+        <p class="tips">每条记录均可下载预览</p>
+      <!-- <a class="downLin2" href="https://htk-call.oss-cn-beijing.aliyuncs.com/excle/template/%E5%AE%A2%E6%88%B7%E4%BF%A1%E6%81%AF%E5%AF%BC%E5%85%A5.xlsx">模板下载</a> -->
+      </div>
+      <div class="table_box">
+        <el-table
+          ref="zx-list-data-&quot;"
+          v-loading="loading"
+          :data="dataList"
+          tooltip-effect="dark"
+          style="width:95%;margin:10px auto 0px auto;"
+          highlight-current-row
+        >
+          <el-table-column prop="fileName" label="上传文件名" />
+          <el-table-column prop="importCount" label="导入数量" />
+          <el-table-column prop="scount" label="成功数量" />
+          <el-table-column prop="fcount" label="失败数量" />
+          <el-table-column prop="createTime" label="上传时间">
+            <template slot-scope="scope">
+              {{ formatDate(scope.row.createTime) }}
+            </template>
+          </el-table-column>
+          <el-table-column width="150px" prop="createTime" label="下载文档">
+            <template slot-scope="scope">
+              <a v-if="scope.row.resUrl" class="downLin" :href="scope.row.resUrl">下载</a>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="block fenye">
+          <el-pagination
+            :current-page="Current"
+            :page-sizes="[10, 20, 30, 50]"
+            :page-size="Size"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
+        </div>
       </div>
     </div>
 
-    <div class="table_box">
-      <div class="title_box">
-        <p>导入历史</p>
-        <span class="line" />
-      </div>
-      <el-table
-        ref="zx-list-data-&quot;"
-        v-loading="loading"
-        :data="dataList"
-        tooltip-effect="dark"
-        style="width: 100%;"
-        border
-      >
-        <el-table-column prop="fileName" label="上传文件名" />
-        <el-table-column prop="importCount" label="导入数量" />
-        <el-table-column prop="scount" label="成功数量" />
-        <el-table-column prop="fcount" label="失败数量" />
-        <el-table-column prop="createTime" label="上传时间">
-          <template slot-scope="scope">
-            {{ formatDate(scope.row.createTime) }}
-          </template>
-        </el-table-column>
-        <el-table-column width="150px" prop="createTime" label="下载文档">
-          <template slot-scope="scope">
-            <a class="downLin" :href="scope.row.resUrl">下载</a>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div class="block fenye">
-        <el-pagination
-          :current-page="Current"
-          :page-sizes="[10, 20, 30, 50]"
-          :page-size="Size"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
-      </div>
-    </div>
   </div>
 </template>
 
@@ -189,9 +208,9 @@ export default {
           // this.isActive = res.data
           console.log(res)
           if (+res.data.maskStatus === 0) {
-            this.delivery = false
+            this.queryUp.delivery = false
           } else if (+res.data.maskStatus === 1) {
-            this.delivery = true
+            this.queryUp.delivery = true
           }
         }
       })
@@ -463,20 +482,20 @@ export default {
     display: block;
     width: 34px;
     height: 4px;
-    background: #1c6feb;
+    background: #00c48f;
     margin: 8px 0 30px 0;
   }
   .downLin{
     display: inline-block;
     padding: 3px 10px;
-    background-color: #409EFF;
+    background-color: #00c48f;
     color: #fff;
     border-radius: 3px;
   }
   .downLin2{
     display: inline-block;
     padding: 6px 10px;
-    background-color: #409EFF;
+    background-color: #00c48f;
     color: #fff;
     font-size: 15px;
     border-radius: 3px;

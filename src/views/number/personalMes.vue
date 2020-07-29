@@ -1,5 +1,6 @@
 <template>
-  <div class="grhd_box">
+  <div class="grhd_box shaowAll">
+    <p class="Ptitle">个人话单</p>
     <el-table
       ref="zx-list-data-&quot;"
       v-loading="loading"
@@ -263,6 +264,19 @@ parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60) + '�
 </script>
 
 <style scoped>
+.shaowAll{
+  /* box-shadow: 2px 4px 8px 8px rgba(0, 0, 0, 0.05); */
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  padding: 20px;
+
+}
+.Ptitle{
+      font-size: 18px;
+    line-height: 18px;
+    color: #222;
+    font-weight: 700;
+
+}
 .grhd_box{
   margin:20px;
 }

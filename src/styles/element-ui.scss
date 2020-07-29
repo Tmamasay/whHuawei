@@ -2,6 +2,12 @@
 .el-select .el-input.is-focus .el-input__inner {
   border-color: #00c48f !important;
 }
+.el-upload-dragger .el-upload__text em {
+  color: #00c48f !important;
+}
+.el-upload-dragger:hover {
+  border-color: #00c48f !important;
+}
 label {
   font-weight: 400!important;
 }
