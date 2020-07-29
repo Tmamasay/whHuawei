@@ -50,7 +50,12 @@ export const componentsMap = {
   departmentManagement: () => import('@/views/organizational_structure/index'),
   personnelManagement: () => import('@/views/organizational_structure/index'),
   callRecords: () => import('@/views/billManagement/index'),
-  personalRecords: () => import('@/views/billManagement/grhd')
+  personalRecords: () => import('@/views/billManagement/grhd'),
+  uploadCustomer: () => import('@/views/number/index'),
+  customerResource: () => import('@/views/number/allNumber'),
+  privateResource: () => import('@/views/number/perNumber'),
+  templateManager: () => import('@/views/number/sign'),
+  smsLog: () => import('@/views/number/personalMes')
 }
 /**
  *对component的处理

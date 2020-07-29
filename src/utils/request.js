@@ -114,6 +114,12 @@ service.interceptors.response.use(
         duration: 5 * 1000
       })
       return Promise.reject(error)
+    } else {
+      Message({
+        message: '网络开小差了，请重试一下~',
+        type: 'error',
+        duration: 5 * 1000
+      })
     }
     // if(){
 

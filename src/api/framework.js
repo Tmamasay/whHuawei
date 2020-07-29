@@ -278,6 +278,134 @@ export function resetUserPassword(data) {
     data
   })
 }
+// 上传电话
+export function importTelLibrary(data) {
+  return request({
+    url: '/kl-customer-biz/excel/importTelLibrary',
+    method: 'post',
+    data
+  })
+}
+// 分页查询导入记录
+export function selectPageUploadLog(data) {
+  return request({
+    url: '/kl-customer-biz/excel/selectPageUploadLog',
+    method: 'post',
+    data
+  })
+}
+// 当前企业下客户资源分页查询
+export function getPageCustomerResources(data) {
+  return request({
+    url: '/kl-customer-biz/customerLibrary/getPageCustomerResources',
+    method: 'post',
+    data
+  })
+}
+// 当前用户下客户资源分页查询(私海)
+export function getPageResourcesByUser(data) {
+  return request({
+    url: '/kl-customer-biz/customerLibrary/getPageResourcesByUser',
+    method: 'post',
+    data
+  })
+}
+// 当前企业新增短信签名
+export function addSmsSign(data) {
+  return request({
+    url: '/kl-call-boss-biz/customerSwitch/addSmsSign',
+    method: 'post',
+    data
+  })
+}
+// 当前企业下所有短信签名
+export function selectSignList(data) {
+  return request({
+    url: '/kl-call-boss-biz/customerSwitch/selectSignList',
+    method: 'post',
+    data
+  })
+}
+// 当前企业新增短信模板
+export function addSmsTemple(data) {
+  return request({
+    url: '/kl-call-boss-biz/customerSwitch/addSmsTemple',
+    method: 'post',
+    data
+  })
+}
+// 当前企业下所有短信模板
+export function selectSmsTempleList(data) {
+  return request({
+    url: '/kl-call-boss-biz/customerSwitch/selectSmsTempleList',
+    method: 'post',
+    data
+  })
+}
+// 删除当前企业短信模板
+export function deleteSmsTemple(data) {
+  return request({
+    url: '/kl-call-boss-biz/customerSwitch/deleteSmsTemple',
+    method: 'post',
+    data
+  })
+}
+// 当前企业下客户挂机短信开关 更改
+export function updateCustomerSmsStatus(data) {
+  return request({
+    url: '/kl-call-boss-biz/customerSwitch/updateCustomerSmsStatus',
+    method: 'post',
+    data
+  })
+}
+// 个人话单短信发送记录
+export function selectSmsLogPage(data) {
+  return request({
+    url: '/kl-call-boss-biz/sendSmsManager/selectSmsLogPage',
+    method: 'post',
+    data
+  })
+}
+// 当前企业下客户开关状态查询
+export function getCustomerSwitch(data) {
+  return request({
+    url: '/kl-call-boss-biz/customerSwitch/getCustomerSwitch',
+    method: 'post',
+    data
+  })
+}
+// 当前企业下客户掩盖电话开关 更改
+export function updateCustomerMaskStatus(data) {
+  return request({
+    url: '/kl-call-boss-biz/customerSwitch/updateCustomerMaskStatus',
+    method: 'post',
+    data
+  })
+}
+// 获取客户预警数据
+export function getByCustomer(data) {
+  return request({
+    url: '/kl-customer-biz/balanceWarning/getByCustomer',
+    method: 'post',
+    data
+  })
+}
+// 预警开关
+export function onOffWarning(data) {
+  return request({
+    url: '/kl-customer-biz/balanceWarning/onOffWarning',
+    method: 'post',
+    data
+  })
+}
+// 预警余额设置
+export function setBalance(data) {
+  return request({
+    url: '/kl-customer-biz/balanceWarning/setBalance',
+    method: 'post',
+    data
+  })
+}
 export function getDepartmentIdsByUid(data) {
   return request({
     url: '/kl-customer-biz/department/getDepartmentIdsByUid',

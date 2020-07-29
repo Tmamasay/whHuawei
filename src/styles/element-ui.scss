@@ -2,9 +2,17 @@
 .el-select .el-input.is-focus .el-input__inner {
   border-color: #00c48f !important;
 }
+label {
+  font-weight: 400!important;
+}
+
 
 .el-select .el-input__inner:focus {
   border-color: #00c48f !important;
+}
+.el-switch.is-checked .el-switch__core {
+  border-color: #00c48f !important;
+  background-color: #00c48f !important;
 }
 .el-input .el-input__inner:focus {
   border-color: #00c48f !important;

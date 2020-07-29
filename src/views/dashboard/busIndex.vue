@@ -28,7 +28,7 @@
 
       </div>
       <div class="shaowAll" style="width: 15%">
-        <el-tooltip content="账户余额" placement="bottom" effect="light">
+        <el-tooltip content="账户余额,可用额度预警是低于设置的预警阀值，会收到短信通知" placement="bottom" effect="light">
           <i class="el-icon-warning-outline jiesi" />
         </el-tooltip>
         <div class="lineRight">
@@ -36,7 +36,9 @@
           <div class="rightLi">
             <img src="@/assets/home/wallet.png" alt="" srcset="">
           </div>
-          <p class="rightL2"><span>￥</span> 900.00</p>
+          <p class="rightL2"><span>余额:</span> {{ yueNum }}</p>
+          <p class="rightL3">可用额度预警：<el-switch v-model="yueYJin" @change="changeStatus" /></p>
+          <p class="rightL4">预警阀值：￥{{ yujinNum }} <span class="changeYe" @click="changeYe">修改</span></p>
         </div>
       </div>
     </div>
@@ -102,6 +104,23 @@
       </div>
 
     </div>
+    <el-dialog
+      title="预警值设置"
+      :visible.sync="SignDialogFormVisible"
+      class="changeIn"
+      :close-on-click-modal="false"
+      style="width:840px;margin:0 auto;"
+    >
+      <el-form ref="forgetForm" class="wkmm" :model="formSign" :rules="formSignRule">
+        <el-form-item label prop="smsSign" style="width:100%;border: 1px solid rgba(255, 255, 255, 0.5)">
+          <el-input v-model="formSign.smsSign" autocomplete="off" placeholder="请输入预警值" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="SignDialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click.native="findSubmit">确 定</el-button>
+      </div>
+    </el-dialog>
 
     <!-- <div class="table_box">
       <div class="title_box">
@@ -156,11 +175,23 @@
 </template>
 
 <script>
-import { selectLatelyCompanyData, manageFindCallCensusNum, selectYesterdayTop10 } from '@/api/framework'
+import { getUsable, selectLatelyCompanyData, manageFindCallCensusNum, selectYesterdayTop10, onOffWarning, setBalance, getByCustomer } from '@/api/framework'
 // import FileSaver from 'file-saver'
+import { getcustomerId } from '@/utils/auth'
 export default {
   data() {
     return {
+      // 预警
+      SignDialogFormVisible: false,
+      formSign: {
+        smsSign: ''
+      },
+      formSignRule: {
+        smsSign: [{ required: true, message: '请输入预警值', trigger: 'blur' }]
+      },
+      yueYJin: true,
+      yujinNum: 0,
+      yueNum: 0,
       bd_num: [], // 拨打数
       jt_num: [], // 接通数
       thsc_num: [], // 通话时长
@@ -178,6 +209,8 @@ export default {
     }
   },
   mounted() {
+    this.getByCustomer()
+    this.getNum()
     // 7天的走势
     this.getqiday()
     // 当日通话情况
@@ -193,9 +226,82 @@ export default {
     }, 300)
   },
   methods: {
+    async getNum() {
+      await getUsable({
+        param: {
+          customerId: getcustomerId()
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.statusCode === '00000') {
+          this.yueNum = this.toNum2(res.data / 100)
+        }
+      })
+    },
+    findSubmit() {
+      this.$refs.forgetForm.validate(valid => {
+        if (valid) {
+          const data = {
+            param: {
+              customerId: getcustomerId(),
+              warningAmount: this.formSign.smsSign * 100
+            }
+          }
+          setBalance(data).then(res => {
+            if (res.statusCode === '00000') {
+            //   this.$message({
+            //     message: '密码重置成功',
+            //     type: 'success',
+            //     duration: 3 * 1000
+            //   })
+              this.formSign = {
+                smsSign: ''
+              }
+              this.SignDialogFormVisible = false
+              this.getByCustomer()
+            }
+          })
+        }
+      })
+    },
+    changeYe() {
+      this.SignDialogFormVisible = true
+    },
+    changeStatus() {
+      onOffWarning({
+        param: {
+          customerId: getcustomerId(),
+          status: this.yueYJin ? 'on' : 'off',
+          warningAmount: this.yujinNum * 100
+        }
+      }).then(res => {
+        console.log(res)
+      })
+    },
+    async getByCustomer() {
+      await getByCustomer({
+        param: {
+          customerId: getcustomerId()
+        }
+      }).then(res => {
+        if (res.statusCode === '00000') {
+          console.log(res)
+          if (res.data.status === 'on') {
+            this.yueYJin = true
+          } else if (res.data.status === 'off') {
+            this.yueYJin = false
+          }
+          this.yujinNum = this.toNum2(res.data.warningAmount / 100)
+        }
+      })
+    },
     toNum(value) {
       if (!value) return 0
       return Math.ceil(value)
+    },
+    toNum2(value) {
+      if (!value) return 0
+      return value.toFixed(2)
     },
     // 分页
     handleSizeChange(val) {
@@ -556,8 +662,8 @@ cursor: pointer;
 
 }
 .rightLi{
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
 }
 .rightLi img{
   width: 100%;
@@ -568,9 +674,24 @@ cursor: pointer;
     color: #333;
     line-height: 36px;
     /* margin-bottom: 20px; */
+    font-weight: 500;
 }
 .rightL2 span{
-font-weight: 600;
+font-weight: 500;
+}
+.rightL3{
+  font-size: 17px;
+    color: #333;
+    margin-top: -10px;
+    /* line-height: 36px; */
+}
+.rightL4{
+font-size: 16px;
+    color: rgb(99, 99, 99);
+    margin-top: -10px;
+}
+.changeYe{
+  color: #00c48f;
 }
 .Ptitle{
       font-size: 18px;
