@@ -3,6 +3,20 @@ import Cookies from 'js-cookie'
 const TokenKey = 'vue_admin_template_token'
 const InfoKey = 'info'
 const refreshToken = 'refresh_token'
+const maskStatus = 'maskPhone'
+// 掩盖电话
+export function getMaskStatus() {
+  return Cookies.get(maskStatus)
+}
+
+export function setMaskStatus(status) {
+  return Cookies.set(maskStatus, status)
+}
+
+export function removeMaskStatus() {
+  return Cookies.remove(maskStatus)
+}
+// ======
 
 export function getToken() {
   return Cookies.get(TokenKey)

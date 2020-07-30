@@ -4,12 +4,14 @@
     <div class="chart_box shaowAll">
       <div class="heardNum">
         <h3 class="Ptitle">号码库上传</h3>
-        <p class="tips">上传未指定用户将上传至公共号码库（只能上传execl文件）</p>
+        <p class="tips">请按模板填写相关信息,未指定用户将上传至公共号码库,上传后失败记录文件有效时间为一天</p>
       <!-- <a class="downLin2" href="https://htk-call.oss-cn-beijing.aliyuncs.com/excle/template/%E5%AE%A2%E6%88%B7%E4%BF%A1%E6%81%AF%E5%AF%BC%E5%85%A5.xlsx">模板下载</a> -->
       </div>
       <div id="myChart" style="width:100%; ">
         <el-form ref="form" label-position="left" :model="queryUp" label-width="110px">
-
+          <el-form-item label="模板下载">
+            <a class="downLin2" href="https://htk-call.oss-cn-beijing.aliyuncs.com/excle/template/%E5%AE%A2%E6%88%B7%E4%BF%A1%E6%81%AF%E5%AF%BC%E5%85%A5.xlsx">下载</a>
+          </el-form-item>
           <el-form-item label="号码掩盖">
             <el-switch v-model="queryUp.delivery" @change="changeStatus" />
           </el-form-item>
@@ -115,7 +117,7 @@
               {{ formatDate(scope.row.createTime) }}
             </template>
           </el-table-column>
-          <el-table-column width="150px" prop="createTime" label="下载文档">
+          <el-table-column width="150px" prop="createTime" label="失败信息">
             <template slot-scope="scope">
               <a v-if="scope.row.resUrl" class="downLin" :href="scope.row.resUrl">下载</a>
             </template>
@@ -141,7 +143,7 @@
 <script>
 import { importTelLibrary, selectPageUploadLog, getAllDepartment, getUsersByDepartment, getCustomerSwitch, updateCustomerMaskStatus } from '@/api/framework'
 // import FileSaver from 'file-saver'
-import { getcustomerId } from '@/utils/auth'
+import { getcustomerId, setMaskStatus } from '@/utils/auth'
 export default {
   data() {
     return {
@@ -188,7 +190,7 @@ export default {
       updateCustomerMaskStatus(data).then(res => {
         if (res.statusCode === '00000') {
           // this.isActive = res.data
-          console.log(res)
+          setMaskStatus(callback ? 1 : 0)
           // if (+res.data.maskStatus === 0) {
           //   this.delivery = false
           // } else if (+res.data.maskStatus === 1) {

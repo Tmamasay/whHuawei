@@ -1,7 +1,7 @@
 <template>
   <div class="grhd_box shaowAll">
     <div class="toolS">
-      <p class="Ptitle">通话记录</p>
+      <p class="Ptitle">公共号码库</p>
       <el-form :inline="true" :model="query" class="demo-form-inline">
         <el-form-item label="">
           <el-input v-model="query.name" placeholder="请输入客户姓名" />
@@ -10,7 +10,7 @@
           <el-input v-model="query.phone" placeholder="请输入客户电话" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search">查询</el-button>
+          <el-button type="primary" size="small" @click="search">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -67,7 +67,8 @@
 </template>
 
 <script>
-import { getPageCustomerResources, getCustomerSwitch, callInside } from '@/api/framework'
+import { getPageCustomerResources, callInside } from '@/api/framework'
+import { getMaskStatus } from '@/utils/auth'
 export default {
   data() {
     return {
@@ -90,38 +91,19 @@ export default {
     }
   },
   mounted() {
-    this.getCustomerSwitch()
     this.getCountDays()
     this.getxztime()
     this.getime()
     this.getlist()
   },
   methods: {
-    // 当前企业下客户开关状态查询
-    async getCustomerSwitch() {
-      var data = {
-        param: {
-        }
-      }
-      await getCustomerSwitch(data).then(res => {
-        if (res.statusCode === '00000') {
-          // this.isActive = res.data
-          console.log(res)
-          if (+res.data.maskStatus === 0) {
-            this.delivery = false
-          } else if (+res.data.maskStatus === 1) {
-            this.delivery = true
-          }
-        }
-      })
-    },
     search() {
       this.getlist()
     },
     formatPhone(phone) {
       debugger
-      if (this.delivery) {
-        return phone.replace(phone.substr(3, 4), '****')
+      if (+getMaskStatus()) {
+        return `${phone.substr(0, phone.length - 4)}****`
       } else {
         return phone
       }

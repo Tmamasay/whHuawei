@@ -1,6 +1,6 @@
 // import { logout } from '@/api/user'
-import { userLogin, getMyMenus, loginOut } from '@/api/framework'
-import { removeToken, removeisOpen, removeRefreshToken, removeInfo, removecustomerId, getToken, setToken, setRefreshToken, getInfoo, setcustomerId } from '@/utils/auth'
+import { userLogin, getMyMenus, getCustomerSwitch, loginOut } from '@/api/framework'
+import { removeToken, removeisOpen, setMaskStatus, removeMaskStatus, removeRefreshToken, removeInfo, removecustomerId, getToken, setToken, setRefreshToken, getInfoo, setcustomerId } from '@/utils/auth'
 import { resetRouter, constantRoutes } from '@/router'
 // import { constantRoutes } from '@/router'
 import Layout from '@/layout'
@@ -56,13 +56,22 @@ const actions = {
       }
       userLogin(data).then(response => {
         console.log(response)
-        if (response.data.code !== '403') {
+        if (response.statusCode === '00000') {
           commit('SET_TOKEN', response.data.access_token)
           setToken(`Bearer ${response.data.access_token}`)
           setRefreshToken(response.data.refresh_token)
           console.log(response.data.access_token)
           setcustomerId(response.data.customerId)
           debugger
+          const data = {
+            param: {
+            }
+          }
+          getCustomerSwitch(data).then(res => {
+            if (res.statusCode === '00000') {
+              setMaskStatus(res.data.maskStatus)
+            }
+          })
         }
         resolve(response)
       }).catch(error => {
@@ -80,13 +89,6 @@ const actions = {
         }
       }
       getMyMenus(data).then(response => {
-        // const data = {
-        //   avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-        //   name: 'Super Admin'
-        // }
-        console.log(response)
-        debugger
-        // setInfo(data.name)
         if (!data) {
           reject('Verification failed, please Login again.')
         }
@@ -120,6 +122,7 @@ const actions = {
         commit('RESET_STATE')
         commit('SET_NAME', '')
         removeisOpen()
+        removeMaskStatus()
         // commit('SET_NAME', response.statusCode)
       }).catch(error => {
         reject(error)

@@ -406,6 +406,14 @@ export function setBalance(data) {
     data
   })
 }
+// 删除签名
+export function delSmsSign(data) {
+  return request({
+    url: '/kl-call-boss-biz/customerSwitch/delSmsSign',
+    method: 'post',
+    data
+  })
+}
 export function getDepartmentIdsByUid(data) {
   return request({
     url: '/kl-customer-biz/department/getDepartmentIdsByUid',

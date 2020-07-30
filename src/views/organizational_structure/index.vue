@@ -180,6 +180,23 @@
         </div>
       </el-col>
     </el-row>
+    <el-dialog
+      title="修改密码"
+      :visible.sync="SignDialogFormVisible"
+      class="changeIn"
+      :close-on-click-modal="false"
+      style="width:840px;margin:0 auto;"
+    >
+      <el-form ref="forgetForm" class="wkmm" :model="formSign" :rules="formSignRule">
+        <el-form-item label prop="smsSign" style="width:100%;border: 1px solid rgba(255, 255, 255, 0.5)">
+          <el-input v-model="formSign.smsSign" autocomplete="off" placeholder="请输入新密码" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="SignDialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click.native="findSubmit">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -246,6 +263,14 @@ export default {
       }, 100)
     }
     return {
+      SignDialogFormVisible: false,
+      formSign: {
+        smsSign: '',
+        userid: ''
+      },
+      formSignRule: {
+        smsSign: [{ required: true, message: '请输入新密码', trigger: 'blur' }]
+      },
       body_height: '', // 页面高度
       dialogVisible: false, // 新建部门弹出框
       addBmData: {// 新建部门数据
@@ -372,30 +397,29 @@ export default {
     console.log(this.removeBmishow)
   },
   methods: {
-    resetUserPassword(row) {
-      this.$confirm('此操作会将用户密码重置为123456, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        resetUserPassword({
-          param: {
-            userId: row.uid
-          }
-        }).then(res => {
-          if (res.statusCode === '00000') {
-            this.$message({
-              type: 'success',
-              message: '操作成功!'
-            })
-          }
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        })
+    findSubmit() {
+      this.$refs.forgetForm.validate(valid => {
+        if (valid) {
+          resetUserPassword({
+            param: {
+              userId: this.formSign.userid,
+              password: this.formSign.smsSign
+            }
+          }).then(res => {
+            if (res.statusCode === '00000') {
+              this.$message({
+                type: 'success',
+                message: '操作成功!'
+              })
+              this.SignDialogFormVisible = false
+            }
+          })
+        }
       })
+    },
+    resetUserPassword(row) {
+      this.formSign.userid = row.uid
+      this.SignDialogFormVisible = true
     },
     // 获取角色列表
     async getjiaose() {

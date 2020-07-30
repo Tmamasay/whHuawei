@@ -1,20 +1,20 @@
 <template>
   <div class="dashboard-container">
 
-    <div class="chart_box">
-      <div class="title_box">
-        <p>签名管理</p>
-        <span class="line" />
+    <div class="chart_box shaowAll">
+      <div class="heardNum">
+        <h3 class="Ptitle">签名管理</h3>
+        <el-button v-if="!SignList.length" size="small" class="tips" @click="addSign">新增签名</el-button>
       </div>
-      <a v-if="!SignList.length" class="downLin2" @click="addSign">新增签名</a>
-      <div id="myChart" style="width:100%; height:150px;padding:15px">
+      <!-- <a v-if="!SignList.length" class="downLin2" @click="addSign">新增签名</a> -->
+      <div id="myChart" style="width:100%;padding:15px">
         <el-table
           ref="zx-list-data-&quot;"
           v-loading="loading"
           :data="SignList"
           tooltip-effect="dark"
-          style="width: 100%;"
-          border
+          style="width:95%;margin:10px auto 20px auto;"
+          highlight-current-row
         >
           <el-table-column prop="siginId" label="签名id" />
           <el-table-column prop="smsSign" label="短信签名" />
@@ -28,6 +28,12 @@
               {{ formatDate(scope.row.createTime) }}
             </template>
           </el-table-column>
+          <el-table-column width="150px" prop="createTime" label="操作">
+            <template slot-scope="scope">
+              <p class="downLin" @click="delSign(scope.row)">删除</p>
+            </template>
+          </el-table-column>
+
           <!-- <el-table-column width="150px" prop="createTime" label="操作">
             <template slot-scope="scope">
               <p class="downLin" @click="edit(scope.row)">编辑</p>
@@ -35,23 +41,19 @@
           </el-table-column> -->
         </el-table>
       </div>
-    </div>
-
-    <div class="table_box" s>
-      <div class="title_box">
-        <p>模板管理</p>
-        <span class="line" />
+      <div class="heardNum">
+        <h3 class="Ptitle">模板管理</h3>
+        <el-button v-if="dataList.length<6" size="small" class="tips" @click="addSmsTemple">新增模板</el-button>
+        <el-button v-if="dataList.length>0" size="small" class="tips" @click="checkSmsTemple">启用模板</el-button>
       </div>
-      <a v-if="dataList.length<6" class="downLin2" @click="addSmsTemple">新增模板</a>
-      <a v-if="dataList.length>0" class="downLin2" @click="checkSmsTemple">启用模板</a>
       <div id="myChart" style="width:100%; height:350px;padding:15px">
         <el-table
           ref="zx-list-data-&quot;"
           v-loading="loading"
           :data="dataList"
           tooltip-effect="dark"
-          style="width: 100%;"
-          border
+          style="width:95%;margin:10px auto 20px auto;"
+          highlight-current-row
         >
           <!-- <el-table-column prop="templateId" label="模板id" /> -->
           <el-table-column prop="templateName" label="模板名称" />
@@ -79,7 +81,9 @@
           </el-table-column>
         </el-table>
       </div>
+    </div>
 
+    <div class="table_box">
       <el-dialog
         title="短信签名"
         :visible.sync="SignDialogFormVisible"
@@ -151,7 +155,7 @@
 </template>
 
 <script>
-import { addSmsSign, updateCustomerSmsStatus, addSmsTemple, deleteSmsTemple, selectSmsTempleList, selectSignList, getCustomerSwitch } from '@/api/framework'
+import { addSmsSign, delSmsSign, updateCustomerSmsStatus, addSmsTemple, deleteSmsTemple, selectSmsTempleList, selectSignList, getCustomerSwitch } from '@/api/framework'
 // import FileSaver from 'file-saver'
 export default {
   data() {
@@ -216,6 +220,26 @@ export default {
           this.isActive = res.data
           console.log(res)
         }
+      })
+    },
+    delSign(row) {
+      const _this = this
+      var data = {
+        data: row.id
+      }
+      delSmsSign(data).then(res => {
+        if (res.statusCode === '00000') {
+          _this.$message({
+            message: '操作成功',
+            type: 'success',
+            duration: 3 * 1000
+          })
+          _this.getSignList()
+        }
+      }).catch(err => {
+        _this.$message.error('暂无数据~')
+        _this.loading = false
+        console.log(err)
       })
     },
     delLine(row) {
@@ -422,6 +446,32 @@ export default {
 </script>
 
 <style scoped>
+.heardNum{
+      margin-bottom: 24px;
+    padding: 10px 0;
+    font-size: 0;
+    border-bottom: 1px solid #f5f5f5;
+
+}
+.tips{
+  display: inline-block;
+    font-size: 12px;
+    color: #999;
+        margin-left: 10px;
+}
+.shaowAll{
+  /* box-shadow: 2px 4px 8px 8px rgba(0, 0, 0, 0.05); */
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+ padding: 20px;
+}
+.Ptitle{
+      font-size: 18px;
+    line-height: 18px;
+    color: #222;
+    font-weight: 700;
+    /* padding: 12px; */
+    display: inline-block;
+}
 .fenye{
     display: block;
     text-align: right;
@@ -443,7 +493,7 @@ export default {
   overflow: hidden;
 }
 .dashboard-container{
-  background: #eeeeee;
+  background: #ffffff;
   padding:20px;
   overflow: auto;
 }
@@ -468,13 +518,13 @@ export default {
     display: block;
     width: 34px;
     height: 4px;
-    background: #1c6feb;
+    background: #00c48f;
     margin: 8px 0 30px 0;
   }
   .downLin{
     display: inline-block;
     padding: 3px 10px;
-    background-color: #409EFF;
+    background-color: #00c48f;
     color: #fff;
     border-radius: 3px;
     cursor: pointer;
@@ -482,7 +532,7 @@ export default {
   .downLin2{
     display: inline-block;
     padding: 6px 10px;
-    background-color: #409EFF;
+    background-color: #00c48f;
     color: #fff;
     font-size: 15px;
     border-radius: 3px;

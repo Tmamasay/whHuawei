@@ -1,6 +1,6 @@
 <template>
   <div class="grhd_box shaowAll">
-    <p class="Ptitle">个人话单</p>
+    <p class="Ptitle">个人短信记录</p>
     <el-table
       ref="zx-list-data-&quot;"
       v-loading="loading"

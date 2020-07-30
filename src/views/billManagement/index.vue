@@ -35,7 +35,11 @@
       <el-table-column type="selection" width="55" />
       <el-table-column prop="gid" label="流水号" />
       <el-table-column prop="activeNum" label="主叫号码" />
-      <el-table-column prop="passiveNum" label="被叫号码" />
+      <el-table-column prop="passiveNum" label="被叫号码">
+        <template slot-scope="scope">
+          {{ formatPhone(scope.row.passiveNum) }}
+        </template>
+      </el-table-column>
       <el-table-column prop="answerStatus" label="接通状态">
         <template slot-scope="scope">
           <span v-if="scope.row.answerStatus ==='已接通'" class="ls">{{ scope.row.answerStatus }}</span>
@@ -99,6 +103,7 @@
 <script>
 import { selectAllCallLogPage } from '@/api/chengxu'
 // import { getqxbutton } from '@/utils/auth'
+import { getMaskStatus } from '@/utils/auth'
 export default {
   data() {
     return {
@@ -176,6 +181,14 @@ export default {
     this.getlist()
   },
   methods: {
+    formatPhone(phone) {
+      debugger
+      if (+getMaskStatus()) {
+        return `${phone.substr(0, phone.length - 4)}****`
+      } else {
+        return phone
+      }
+    },
     // 弹窗关闭，音频暂停
     handleClose() {
       var audio = document.getElementById('audio')

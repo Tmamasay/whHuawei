@@ -33,10 +33,19 @@
       highlight-current-row
     >
       <el-table-column prop="gid" label="流水ID" />
-      <el-table-column prop="productCode" label="产品类型" />
-      <el-table-column prop="busAmount" label="账户金额(元)">
+      <el-table-column prop="productCode" label="产品类型">
+        <template slot-scope="scope">
+          {{ scope.row.productCode.msg }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="busAmount" label="消费金额(元)">
         <template slot-scope="scope">
           {{ toNum(scope.row.busAmount/100) }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="balance" label="账户余额(元)">
+        <template slot-scope="scope">
+          {{ toNum(scope.row.balance/100) }}
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间">
