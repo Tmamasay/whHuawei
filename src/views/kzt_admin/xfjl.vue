@@ -58,7 +58,7 @@
       <el-table-column prop="type" label="交易类型">
         <template slot-scope="scope">
           <!-- {{ scope.row.type==='recharge'?'充值':scope.row.type==='consume'?'消费': '转移' }} -->
-          {{ scope.row.type }}
+          {{ scope.row.type.msg }}
         </template>
       </el-table-column>
     </el-table>

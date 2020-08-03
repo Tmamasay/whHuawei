@@ -5,7 +5,7 @@
     <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
-      <el-button class="waihu" type="primary" @click="boda_pop"> <svg-icon style="" icon-class="waihu" />&nbsp;呼叫</el-button>
+      <!-- <el-button class="waihu" type="primary" @click="boda_pop"> <svg-icon style="" icon-class="waihu" />&nbsp;呼叫</el-button> -->
       <!-- <el-button class="waihu" type="primary"> <svg-icon style="" icon-class="waihu" />&nbsp;呼叫</el-button> -->
 
       <el-dropdown class="avatar-container" trigger="click">

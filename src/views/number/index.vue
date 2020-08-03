@@ -34,6 +34,7 @@
                 :value="item.uid"
               />
             </el-select>
+            <el-button type="danger" size="medium" style="margin-left:5px" @click="pushNull">清空选项</el-button>
           </el-form-item>
           <el-form-item label="号码上传">
             <el-upload
@@ -180,6 +181,12 @@ export default {
     this.getCustomerSwitch()
   },
   methods: {
+    pushNull() {
+      this.queryUp.bumen = ''
+      this.queryUp.user = ''
+      this.userUid = ''
+      this.userData = []
+    },
     changeStatus(callback) {
       console.log(callback)
       var data = {
@@ -216,15 +223,6 @@ export default {
           }
         }
       })
-    },
-
-    pushNull() {
-      this.queryUp = {
-        bumen: '',
-        user: ''
-      }
-      this.userUid = ''
-      this.userData = []
     },
     getUser1(e) {
       console.log(e)
@@ -344,7 +342,14 @@ export default {
       console.log(_this.uploadData)
     },
     async uploadFile(e) {
-      debugger
+      if (this.queryUp.bumen && !this.userUid) {
+        this.$message({
+          message: '请选择成员',
+          type: 'warning'
+        })
+        this.$refs.upload.clearFiles()
+        return
+      }
       await importTelLibrary(this.uploadData).then(res => {
         if (res.statusCode === '00000') {
           console.log(res)
@@ -352,6 +357,7 @@ export default {
             message: '上传成功',
             type: 'success'
           })
+          this.$refs.upload.clearFiles()
           this.getlist()
         } else {
           this.$message.error(res.status)
@@ -495,8 +501,8 @@ export default {
     border-radius: 3px;
   }
   .downLin2{
-    display: inline-block;
-    padding: 6px 10px;
+    /* display: inline-block; */
+    padding: 8px 10px;
     background-color: #00c48f;
     color: #fff;
     font-size: 15px;

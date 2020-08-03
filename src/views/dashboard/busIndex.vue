@@ -5,7 +5,7 @@
       <span class="line" />
     </div> -->
     <div class="lineYue">
-      <div class="chart_box shaowAll" style="width: 83%">
+      <div class="chart_box shaowAll" style="width: 84%">
         <p class="Ptitle">今日数据概览</p>
         <div id="myChart" style="width: 100%;height:140px">
           <div class="itemDi">
@@ -42,36 +42,46 @@
         </div>
       </div>
     </div>
-    <div class="chart_box shaowAll" style="width: 100%;margin-top:30px">
-      <p class="Ptitle">常用功能</p>
-      <div id="myChart" style="width: 100%;height:140px">
-        <div class="itemDi">
-          <div class="DM1">
-            <img src="@/assets/home/phone.png" alt="" srcset="">
+    <div class="lineYue">
+      <div class="chart_box shaowAll" style="width: 84%;margin-top:30px">
+        <p class="Ptitle">常用功能</p>
+        <div id="myChart" style="width: 100%;height:140px">
+          <div class="itemDi" @click="goSwicth(1)">
+            <div class="DM1">
+              <img src="@/assets/home/phone.png" alt="" srcset="">
+            </div>
+            <p class="DM2">外呼</p>
           </div>
-          <p class="DM2">外呼</p>
-        </div>
-        <div class="itemDi">
-          <div class="DM1">
-            <img src="@/assets/home/manage.png" alt="" srcset="">
+          <div class="itemDi" @click="goSwicth(2)">
+            <div class="DM1">
+              <img src="@/assets/home/manage.png" alt="" srcset="">
+            </div>
+            <p class="DM2">客户资源库</p>
           </div>
-          <p class="DM2">客户资源库</p>
-        </div>
-        <div class="itemDi">
-          <div class="DM1">
-            <img src="@/assets/home/check.png" alt="" srcset="">
+          <div class="itemDi" @click="goSwicth(3)">
+            <div class="DM1">
+              <img src="@/assets/home/check.png" alt="" srcset="">
+            </div>
+            <p class="DM2">导入客户</p>
           </div>
-          <p class="DM2">导入客户</p>
-        </div>
-        <div class="itemDi">
-          <div class="DM1">
-            <img src="@/assets/home/schedule.png" alt="" srcset="">
+          <div class="itemDi" @click="goSwicth(4)">
+            <div class="DM1">
+              <img src="@/assets/home/schedule.png" alt="" srcset="">
+            </div>
+            <p class="DM2">话单总览</p>
           </div>
-          <p class="DM2">话单总览</p>
-        </div>
 
+        </div>
       </div>
-
+      <div class="shaowAll" style="width: 15%;margin-top:30px">
+        <el-tooltip content="最新消息通知" placement="bottom" effect="light">
+          <i class="el-icon-warning-outline jiesi" />
+        </el-tooltip>
+        <div class="lineRight2">
+          <p class="Ptitle">最新消息</p>
+          <p />
+        </div>
+      </div>
     </div>
     <div class="chart_box shaowAll" style="width: 100%;margin-top:30px">
       <p class="Ptitle">常见问题及使用规范</p>
@@ -226,6 +236,25 @@ export default {
     }, 300)
   },
   methods: {
+    goSwicth(num) {
+      switch (num) {
+        case 1:
+
+          break
+        case 2:
+          this.$router.push('/cxLrs/admin/customerResource')
+          break
+        case 3:
+          this.$router.push('/cxLrs/admin/uploadCustomer')
+          break
+        case 4:
+          this.$router.push('/cxLrs/admin/callRecords')
+          break
+
+        default:
+          break
+      }
+    },
     async getNum() {
       await getUsable({
         param: {
@@ -661,32 +690,38 @@ align-items: center;
 cursor: pointer;
 
 }
+.lineRight2{
+  text-align: left;
+  margin: 15px auto auto 5px;
+
+}
 .rightLi{
-  width: 70px;
-  height: 70px;
+  width: 65px;
+  height: 65px;
 }
 .rightLi img{
   width: 100%;
   height: 100%;
 }
 .rightL2{
-  font-size: 25px;
-    color: #333;
-    line-height: 36px;
+  font-size: 23px;
+    color: #f7603e;
+    line-height: 32px;
     /* margin-bottom: 20px; */
     font-weight: 500;
+
 }
 .rightL2 span{
 font-weight: 500;
 }
 .rightL3{
-  font-size: 17px;
+  font-size: 16px;
     color: #333;
-    margin-top: -10px;
+    margin-top: -12px;
     /* line-height: 36px; */
 }
 .rightL4{
-font-size: 16px;
+font-size: 15px;
     color: rgb(99, 99, 99);
     margin-top: -10px;
 }
